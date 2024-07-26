@@ -1,0 +1,29 @@
+name: Update Navigator Gist Files
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  update-gist:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.0'  # Specify the required Python version
+    
+    - name: Install Dependencies
+      run: |
+        python -m pip install --upgrade pip
+    
+    - name: Update Navigator Gist Files
+      env:
+        GITHUB_TOKEN: ${{ secrets.NAVIGATOR_GIST_TOKEN }}
+      if: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+      run: python -m detection_rules dev update-navigator-gists
